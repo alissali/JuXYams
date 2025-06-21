@@ -1,0 +1,2 @@
+# JuXYams
+JeuX: Educational JuX
