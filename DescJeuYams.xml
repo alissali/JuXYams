@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="C:/Pro/JUX/RJUX/RJUXYams/DescJeuYams.xsl" ?>
+<rJUX xmlns:xlink="http://www.w3.org/2000/xlink"
+      xmlns:jux="http://perso.wanadoo.fr/jux" >
+
+<!-- nom est obligatoire et doit etre le premier attribut -->
+<Jeu nom = "Yams" titre = "Regles du jeu" >
+  <Score>
+    <Total ref = "total">
+   	<Bonus nombre = "6" val = "35" seuil = "63">
+ 
+  		<Figure classe = "Somme" alt="Somme(x)">
+ 		</Figure>
+	</Bonus>
+
+ 	<Figure nom = "P. Suite"
+		classe = "Suite"
+		alt ="12345"
+		score= "15" >
+ 	</Figure>
+ 	<Figure nom =  "G. Suite"
+		classe = "Suite"
+		alt ="23456"
+		score= "20" >
+ 	</Figure>
+
+ 	<Figure nom = "Brelan"
+		classe = "Egalite"
+		type = "3"
+		alt ="xxxyz"
+     		score= "25" >
+	</Figure>
+               		
+	<Figure nom = "Full"
+		classe = "Full"
+		alt ="xxxyy"
+     		score= "30" >
+	</Figure>
+
+ 	<Figure nom =  "Carre"
+		classe = "Egalite"
+		alt ="xxxxy"
+		type =   "4"
+		score = "40">
+ 	</Figure>
+
+ 	<Figure nom =  "Yams"
+		classe = "Egalite"
+		alt ="xxxxx"
+		type = "5"
+		score = "50">
+ 	</Figure>
+
+ 	<Figure nom = "Plus"
+		classe = "Option"
+     		alt ="positive"
+		type = "+1">
+ 	</Figure>
+ 	<Figure nom = "Moins"
+     		classe = "Option"
+		alt ="negative"
+		type = "-1">
+ 	</Figure>
+    </Total>
+  </Score>
+</Jeu>
+</rJUX>
