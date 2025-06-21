@@ -1,0 +1,219 @@
+// Source file: C:/WINDOWS/Bureau/Prototype/Java/AppliYams/AppliYams/AppliYams.java
+
+package GUI;
+
+import java.awt.Frame;
+import java.awt.AWTEvent;
+import GUI.UIPartie;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+import Jeu.Partie;
+
+import java.awt.MenuBar;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.event.ActionEvent;
+
+import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowEvent;
+
+import java.awt.Font;
+
+import Yams.Yams;
+
+import InterfaceUtilisateur.JUXYamsAboutDialog;
+
+public class UIJuXJeu extends Frame implements ActionListener, WindowListener{
+    private int partieCourante = -1;
+    private int nbVals;
+    private String[] nomFigure;
+    public UIPartie m_UIPartie[];
+    
+    private static int nbParties = 10;
+    private static int nbPartiesActives = 0;
+    private Yams m_Yams;
+    private MenuItem ymiQuitterPartie = new MenuItem("Quitter Partie");
+    
+    public UIJuXJeu(Yams m_Yams, int nbVals, String[] nomFigure) {
+        this.m_Yams = m_Yams;
+        this.nbVals = nbVals;
+        this.nomFigure = new String[nomFigure.length];
+        
+        for (int i = 0; i < nomFigure.length; i++)
+            this.nomFigure[i] = new String(nomFigure[i]);
+        
+        m_UIPartie = new UIPartie[nbParties];
+        
+        // TODO : frame inheritance --> UIJEuX    -- Mon Sep 07 08:49:54 CEST 2015 @326 /Internet Time/
+        GridBagLayout gbl = new GridBagLayout();
+        
+        setLayout(gbl);
+        
+        MenuBar ymb = new MenuBar();
+        Menu ymFichier = new Menu("Fichier");
+        ymb.add(ymFichier);
+        ymFichier.addActionListener(this);
+        
+        MenuItem ymiNvlPartie = new MenuItem("Nouvelle Partie");
+        ymiNvlPartie.setEnabled(true);
+        ymFichier.add(ymiNvlPartie);
+
+        MenuItem ymiEnrPartie = new MenuItem("Enregistrer Partie");
+        ymiEnrPartie.setEnabled(false);
+        ymFichier.add(ymiEnrPartie);
+        
+        ymiQuitterPartie.setEnabled(true);
+        ymFichier.add(ymiQuitterPartie);
+
+        MenuItem ymSeparator = new MenuItem("---");
+        ymSeparator.setEnabled(false);
+        ymFichier.add(ymSeparator);
+
+        MenuItem ymiQuitter = new MenuItem("Quitter");
+        ymFichier.add(ymiQuitter);
+		
+        Menu ymAide = new Menu("Aide");
+		MenuItem ymiAide = new MenuItem("Aide");
+        ymiAide.setEnabled(false);
+		ymAide.add(ymiAide);
+		
+		MenuItem ymiAboutMenuItem = new MenuItem("A propos ...");
+		ymAide.add(ymiAboutMenuItem);
+		ymb.add(ymAide);
+		ymiAboutMenuItem.addActionListener(this);
+        
+        setMenuBar(ymb);
+          // int ywidth = (ScoreWidth, desWidth);
+          // int yheight = UIDes.taille + UITableScore.size()
+          // UITableScore.size()a calculer
+          // setSize(ywidth, yheight);
+
+        setTitle("Yams");
+        addWindowListener(this);
+        
+    }
+    public void setUserInterface(Partie pp, int nbJoueurs) {
+        m_UIPartie[nbPartiesActives++] = new UIPartie(nbVals, nomFigure, nbJoueurs);
+
+        partieCourante = nbPartiesActives - 1;
+        m_UIPartie[partieCourante].setInterface(pp);
+        pp.setInterface(m_UIPartie[partieCourante]);
+        m_UIPartie[partieCourante].addWindowListener(this);
+        
+        m_UIPartie[partieCourante].show();
+    }
+            
+ /*   
+    public void processEvent(AWTEvent evt) {
+
+    System.out.println(evt.toString()); 
+
+    }
+    public void processWindowEvent(WindowEvent evt) {
+        System.out.println("WE : " + evt);
+    } 
+    */
+   public void actionPerformed(ActionEvent evt) {
+        System.out.println("Action Menu");
+        String cmd = new String(evt.getActionCommand());
+        if (cmd.equals("Nouvelle Partie")) {
+          System.out.println("Nouvelle Partie");
+          m_Yams.nouvellePartie(this);
+          if(nbPartiesActives == 1)
+            ymiQuitterPartie.setEnabled(true);
+        }
+        else if (cmd.equals("Quitter Partie")) {
+          System.out.println("Quitter Partie");
+          quitterPartie();
+        }
+        else if (cmd.equals("Enregistrer Partie")) {
+          System.out.println("Enregistrer Partie");
+        }
+        else if (cmd.equals("Quitter")) {
+          System.out.println("Quitter");
+          System.exit(0);
+        }
+	    else if (cmd.equals ("A propos ...")) {
+    		try {
+			    // AboutDialog Create and show as modal
+			    (new JUXYamsAboutDialog(this, true)).setVisible(true);
+		    } catch (Exception e) {
+		    }
+	    }   	
+   }
+   
+   private void quitterPartie() {
+        m_Yams.supprimerPartie(partieCourante);
+        m_UIPartie[partieCourante].dispose();
+        if(--nbPartiesActives == 0) {
+            partieCourante = -1;
+            ymiQuitterPartie.setEnabled(false);
+            return;
+        }
+        if (partieCourante != nbPartiesActives)
+            m_UIPartie[partieCourante] = m_UIPartie[nbPartiesActives];
+        else
+            partieCourante--;
+   }
+   
+   public void windowOpened (WindowEvent evt) {
+    System.out.println(evt.toString()); 
+   }
+   public void windowClosed (WindowEvent evt) {
+    System.out.println(evt.toString()); 
+   }
+   public void windowIconified (WindowEvent evt) {
+    System.out.println(evt.toString()); 
+   }
+   public void windowDeiconified (WindowEvent evt) {
+    System.out.println(evt.toString()); 
+   }
+   public void windowActivated (WindowEvent evt) {
+    System.out.println(evt.toString()); 
+        Frame source = (Frame) evt.getSource();
+        for (int i = 0; i < nbPartiesActives; i++)
+            if( source == m_UIPartie[i]) {
+                partieCourante = i;
+                break;
+            }
+   }
+   public void windowDeactivated (WindowEvent evt) {
+    System.out.println(evt.toString()); 
+   }
+   public void windowClosing (WindowEvent evt) {    
+        if (evt.getSource().getClass().toString().equals("class GUI.UIPartie")) {
+                System.out.println("Fin de partie");
+                quitterPartie();
+                return;
+        }
+        try {
+            this.finalize();
+        } catch(Throwable e) {}
+        System.exit(0);
+   }
+   
+    public static void main(String[] args) {
+        int nbVals = 5;  
+        int nbJoueurs = 3;
+          // test : 6 (pour nbVal = 40), puis limite memoire
+        
+        String[] nomFigure = {"1", "2", "3", "4", "5", "6",
+                    "P. Suite", "G. Suite", "Brelan",
+                    "Full", "Carre", "Yams", "Plus", "Moins"};
+        
+
+        // <Tache type = test">
+        // AppliYams ay2 = new AppliYams();
+        // ay2.show();
+        // </Tache>
+ 
+        // AppliYams ay2 = new AppliYams(new Yams(...), nomFigure.length, nomFigure);
+        // ay.show();
+        // ay2.show();
+        // AppliYams ay3 = new AppliYams(100, nomFigure, 1);
+        // ay2.show();
+    }
+   
+}
